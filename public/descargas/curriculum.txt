@@ -1,0 +1,14 @@
+Nombre: Juan Manuel
+Apellidos: Conde Garcia
+Fecha nacimiento: 06-01-1996
+Direccion: C/Cantillana n�10 
+Localidad: San Jose de la Rinconada
+Provincia: Sevilla
+
+
+Estudios: Bachillerato (2012-2014)
+	  Desarrollo Aplicaciones Web(2018-2019)
+
+Experiencia laboral: Ninguna
+
+Conocimientos: HTML, CSS, Java, JavaScrip, Php, Sql, PL-Sql

@@ -22,7 +22,8 @@
     <form action="/php/logout.inc.php" method="POST">
         <input type="submit" value="Logout" name="logout">
     </form>
-    
+
+    <a href="adminer.php"><button>Adminer</button></a>
         <!--  acceso solo para "admin"  -->
 
 
