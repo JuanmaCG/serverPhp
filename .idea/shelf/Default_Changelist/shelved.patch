@@ -1,0 +1,542 @@
+Index: public/php/juanmaCurriculumFormateado.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- public/php/juanmaCurriculumFormateado.php	(date 1554116386068)
++++ public/php/juanmaCurriculumFormateado.php	(date 1554116386068)
+@@ -0,0 +1,7 @@
++
++<?php
++$filecontent = file_get_contents("../descargas/curriculum.txt");
++
++
++echo  nl2br($filecontent);
++
+Index: public/php/agenda.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- public/php/agenda.php	(date 1554121603045)
++++ public/php/agenda.php	(date 1554121603045)
+@@ -0,0 +1,92 @@
++<?php
++    $host_db = "localhost";
++    $user_db = "root";
++    $pass_db = "root";
++    $db_name = "agenda";
++    $tbl_name = "agenda";
++
++    $conexion = new mysqli($host_db, $user_db, $pass_db, $db_name);
++
++    if ($conexion->connect_error) {
++        die("La conexion falló: " . $conexion->connect_error);
++    }
++
++    mysqli_query($conexion, "set names 'UTF8'");
++
++//    mysqli_query($conexion, "INSERT INTO agenda VALUES('1', '2', '3', '4', 5, 6.0)");  INSERTA DATOS
++
++    $result = mysqli_query($conexion, "SELECT * FROM agenda");
++
++    function insertarDatosFormulario($conexion){
++
++        $stmt = $conexion->prepare("INSERT INTO agenda VALUES (?,?,?,?,?,?)");
++        $stmt->bind_param("ssssid", $_POST['nombre'], $_POST['apellidos'], $_POST['direccion'], $_POST['telefono'], $_POST['edad'], $_POST['altura'] );
++        $stmt->execute();
++
++    }
++
++    if(isset($_POST['insertar'])){
++
++        insertarDatosFormulario($conexion);
++    }
++
++/*    $sql = "create table prueba (
++        id int not null primary key auto_increment
++    )";
++
++    if(mysqli_query($conexion, $sql)){
++        echo "Tabla creada.";
++    } else{
++        echo "ERROR $sql. " . mysqli_error($conexion);
++    }*/
++
++
++
++    $conexion->close();
++
++?>
++
++
++
++
++
++    <table border ="1px solid">
++    <tr>
++        <td>Nombre</td>
++        <td>Apellidos</td>
++        <td>Direccion</td>
++        <td>Telefono</td>
++        <td>Edad</td>
++        <td>Altura</td>
++   </tr>
++
++    <?php
++    while($agenda = $result->fetch_assoc()){ ?>
++
++        <tr>
++            <td><?php echo $agenda['nombre']; ?></td>
++            <td><?php echo $agenda['apellidos']; ?></td>
++            <td><?php echo $agenda['direccion']; ?></td>
++            <td><?php echo $agenda['telefono']; ?></td>
++            <td><?php echo $agenda['edad']; ?></td>
++            <td><?php echo $agenda['altura']." M"; ?></td>
++
++        </tr>
++
++    <?php } ?>
++
++</table>
++
++<br>
++
++
++<form action="agenda.php" method="POST">
++
++    <label>Nombre: </label><input type = "text" name ="nombre" required><br>
++    <label>Apellidos: </label><input type = "text" name ="apellidos" required><br>
++    <label>Direccion: </label><input type = "text" name ="direccion" required><br>
++    <label>Telefono: </label> <input type = "text" name ="telefono" required><br>
++    <label>Edad: </label> <input type = "number" name ="edad" required><br>
++    <label>Altura: </label> <input type = "number" name ="altura" step="0.01" required><br>
++    <input type="submit" value="insertar" name ="insertar">
++</form>
+Index: .idea/sqldialects.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/sqldialects.xml	(date 1554119237761)
++++ .idea/sqldialects.xml	(date 1554119237761)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="SqlDialectMappings">
++    <file url="PROJECT" dialect="MySQL" />
++  </component>
++</project>
+\ No newline at end of file
+Index: public/index.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\">\r\n    <title>Index</title>\r\n</head>\r\n<body>\r\n    <a href=\"login.html\">INICIA SESION</a>\r\n\r\n    <br>\r\n\r\n    <a href=\"registro.html\">REGISTRATE</a>\r\n    \r\n</body>\r\n</html>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- public/index.html	(revision ef9a36fa016bb22683c691649681dd1378a3aa73)
++++ public/index.html	(date 1554118594796)
+@@ -7,11 +7,15 @@
+     <title>Index</title>
+ </head>
+ <body>
+-    <a href="login.html">INICIA SESION</a>
++    <a href="login.html">INICIA SESION</a>    <br>
++
++    <a href="registro.html">REGISTRATE</a>    <br>
+ 
+-    <br>
++    <a href="php/juanma.php"> CURRICULUM</a>    <br>
+ 
+-    <a href="registro.html">REGISTRATE</a>
++    <a href="php/juanmaCurriculumFormateado.php">CURRICULUM FORMATEADO</a>  <br>
++
++    <a href="php/agenda.php">AGENDA</a>
+     
+ </body>
+ </html>
+\ No newline at end of file
+Index: public/php/juanma.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- public/php/juanma.php	(date 1554115914398)
++++ public/php/juanma.php	(date 1554115914398)
+@@ -0,0 +1,6 @@
++<?php
++$filecontent = file("../descargas/curriculum.txt");
++
++for($i = 0; $i < sizeof($filecontent); $i++){
++    echo $filecontent[$i];
++}
+Index: public/descargas/curriculum.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- public/descargas/curriculum.txt	(date 1554119695844)
++++ public/descargas/curriculum.txt	(date 1554119695844)
+@@ -0,0 +1,14 @@
++Nombre: Juan Manuel
++Apellidos: Conde Garcia
++Fecha nacimiento: 06-01-1996
++Direccion: C/Cantillana n�10 
++Localidad: San Jose de la Rinconada
++Provincia: Sevilla
++
++
++Estudios: Bachillerato (2012-2014)
++	  Desarrollo Aplicaciones Web(2018-2019)
++
++Experiencia laboral: Ninguna
++
++Conocimientos: HTML, CSS, Java, JavaScrip, Php, Sql, PL-Sql
+\ No newline at end of file
+Index: public/php/admin.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\">\r\n    <title>Administracion</title>\r\n</head>\r\n<body>\r\n    \r\n    <?php\r\n        include 'login.php';\r\n        \r\n        if($_SESSION['username'] !== \"admin\"){\r\n            header(\"Location: ../login.html\");\r\n        }\r\n\r\n    ?>\r\n\r\n    <h1>Pagina de adminisracion</h1>\r\n\r\n    <form action=\"/php/logout.inc.php\" method=\"POST\">\r\n        <input type=\"submit\" value=\"Logout\" name=\"logout\">\r\n    </form>\r\n    \r\n        <!--  acceso solo para \"admin\"  -->\r\n\r\n\r\n    <br><button><a href='/php/usuarios.php'>Usuarios Registrados</button></a>\r\n        \r\n \r\n\r\n</body>\r\n</html>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- public/php/admin.php	(revision ef9a36fa016bb22683c691649681dd1378a3aa73)
++++ public/php/admin.php	(date 1554117137102)
+@@ -22,7 +22,8 @@
+     <form action="/php/logout.inc.php" method="POST">
+         <input type="submit" value="Logout" name="logout">
+     </form>
+-    
++
++    <a href="adminer.php"><button>Adminer</button></a>
+         <!--  acceso solo para "admin"  -->
+ 
+ 
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectFrameBounds\" extendedState=\"6\">\r\n    <option name=\"x\" value=\"180\" />\r\n    <option name=\"y\" value=\"107\" />\r\n    <option name=\"width\" value=\"1080\" />\r\n    <option name=\"height\" value=\"646\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">\r\n    <property name=\"WebServerToolWindowFactoryState\" value=\"false\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/workspace.xml	(revision ef9a36fa016bb22683c691649681dd1378a3aa73)
++++ .idea/workspace.xml	(date 1554122206753)
+@@ -1,12 +1,316 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="ChangeListManager">
++    <list default="true" id="a3170154-a755-4dfc-8f26-0ebb710ced5d" name="Default Changelist" comment="Ejercicios de base de datos y fichero">
++      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/public/descargas/curriculum.txt" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/public/php/agenda.php" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/public/php/juanma.php" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/public/php/juanmaCurriculumFormateado.php" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/public/php/admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/public/php/admin.php" afterDir="false" />
++    </list>
++    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
++    <option name="SHOW_DIALOG" value="false" />
++    <option name="HIGHLIGHT_CONFLICTS" value="true" />
++    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
++    <option name="LAST_RESOLUTION" value="IGNORE" />
++  </component>
++  <component name="DatabaseView">
++    <option name="SHOW_INTERMEDIATE" value="true" />
++    <option name="GROUP_DATA_SOURCES" value="true" />
++    <option name="GROUP_SCHEMA" value="true" />
++    <option name="GROUP_CONTENTS" value="false" />
++    <option name="SORT_POSITIONED" value="false" />
++    <option name="SHOW_EMPTY_GROUPS" value="false" />
++    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
++    <option name="HIDDEN_KINDS">
++      <set />
++    </option>
++    <expand />
++    <select />
++  </component>
++  <component name="FileEditorManager">
++    <leaf>
++      <file pinned="false" current-in-tab="false">
++        <entry file="file://$PROJECT_DIR$/public/index.html">
++          <provider selected="true" editor-type-id="text-editor">
++            <state relative-caret-position="255">
++              <caret line="15" column="76" selection-start-line="15" selection-start-column="76" selection-end-line="15" selection-end-column="76" />
++            </state>
++          </provider>
++        </entry>
++      </file>
++      <file pinned="false" current-in-tab="true">
++        <entry file="file://$PROJECT_DIR$/public/php/agenda.php">
++          <provider selected="true" editor-type-id="text-editor">
++            <state relative-caret-position="150">
++              <caret line="41" selection-start-line="41" selection-end-line="41" />
++            </state>
++          </provider>
++        </entry>
++      </file>
++      <file pinned="false" current-in-tab="false">
++        <entry file="file://$PROJECT_DIR$/public/php/login.php">
++          <provider selected="true" editor-type-id="text-editor">
++            <state relative-caret-position="221">
++              <caret line="13" column="9" selection-start-line="13" selection-start-column="9" selection-end-line="13" selection-end-column="9" />
++            </state>
++          </provider>
++        </entry>
++      </file>
++      <file pinned="false" current-in-tab="false">
++        <entry file="file://$PROJECT_DIR$/public/php/protected.php">
++          <provider selected="true" editor-type-id="text-editor">
++            <state relative-caret-position="102">
++              <caret line="9" column="9" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="9" />
++            </state>
++          </provider>
++        </entry>
++      </file>
++      <file pinned="false" current-in-tab="false">
++        <entry file="file://$PROJECT_DIR$/public/php/borrar.php">
++          <provider selected="true" editor-type-id="text-editor">
++            <state relative-caret-position="272">
++              <caret line="16" column="8" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="28" />
++            </state>
++          </provider>
++        </entry>
++      </file>
++    </leaf>
++  </component>
++  <component name="Git.Settings">
++    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
++  </component>
++  <component name="IdeDocumentHistory">
++    <option name="CHANGED_PATHS">
++      <list>
++        <option value="$PROJECT_DIR$/public/php/juanma.php" />
++        <option value="$PROJECT_DIR$/public/php/juanmaCurriculumFormateado.php" />
++        <option value="$PROJECT_DIR$/public/php/admin.php" />
++        <option value="$PROJECT_DIR$/public/index.html" />
++        <option value="$PROJECT_DIR$/public/descargas/curriculum.txt" />
++        <option value="$PROJECT_DIR$/public/php/agenda.php" />
++        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/9799afe5-651a-40dd-a211-8f1b0d47567f/console.sql" />
++        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/9799afe5-651a-40dd-a211-8f1b0d47567f/console_1.sql" />
++      </list>
++    </option>
++  </component>
+   <component name="ProjectFrameBounds" extendedState="6">
+     <option name="x" value="180" />
+     <option name="y" value="107" />
+     <option name="width" value="1080" />
+     <option name="height" value="646" />
++  </component>
++  <component name="ProjectView">
++    <navigator proportions="" version="1">
++      <foldersAlwaysOnTop value="true" />
++    </navigator>
++    <panes>
++      <pane id="ProjectPane">
++        <subPane>
++          <expand>
++            <path>
++              <item name="my-project" type="b2602c69:ProjectViewProjectNode" />
++              <item name="my-project" type="462c0819:PsiDirectoryNode" />
++            </path>
++            <path>
++              <item name="my-project" type="b2602c69:ProjectViewProjectNode" />
++              <item name="my-project" type="462c0819:PsiDirectoryNode" />
++              <item name="public" type="462c0819:PsiDirectoryNode" />
++            </path>
++            <path>
++              <item name="my-project" type="b2602c69:ProjectViewProjectNode" />
++              <item name="my-project" type="462c0819:PsiDirectoryNode" />
++              <item name="public" type="462c0819:PsiDirectoryNode" />
++              <item name="descargas" type="462c0819:PsiDirectoryNode" />
++            </path>
++            <path>
++              <item name="my-project" type="b2602c69:ProjectViewProjectNode" />
++              <item name="my-project" type="462c0819:PsiDirectoryNode" />
++              <item name="public" type="462c0819:PsiDirectoryNode" />
++              <item name="php" type="462c0819:PsiDirectoryNode" />
++            </path>
++          </expand>
++          <select />
++        </subPane>
++      </pane>
++      <pane id="Scope" />
++    </panes>
+   </component>
+   <component name="PropertiesComponent">
++    <property name="DatabaseDriversLRU" value="mysql" />
++    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+     <property name="WebServerToolWindowFactoryState" value="false" />
++    <property name="database.console.LAST_STATE" value="true" />
++    <property name="nodejs_package_manager_path" value="npm" />
++  </component>
++  <component name="RunDashboard">
++    <option name="ruleStates">
++      <list>
++        <RuleState>
++          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
++        </RuleState>
++        <RuleState>
++          <option name="name" value="StatusDashboardGroupingRule" />
++        </RuleState>
++      </list>
++    </option>
++  </component>
++  <component name="RunManager">
++    <configuration name="agenda.php" type="PhpLocalRunConfigurationType" factoryName="PHP Console" path="$PROJECT_DIR$/public/php/agenda.php">
++      <method v="2" />
++    </configuration>
++  </component>
++  <component name="SvnConfiguration">
++    <configuration />
++  </component>
++  <component name="TaskManager">
++    <task active="true" id="Default" summary="Default task">
++      <changelist id="a3170154-a755-4dfc-8f26-0ebb710ced5d" name="Default Changelist" comment="" />
++      <created>1554113673636</created>
++      <option name="number" value="Default" />
++      <option name="presentableId" value="Default" />
++      <updated>1554113673636</updated>
++      <workItem from="1554113684169" duration="8516000" />
++    </task>
++    <servers />
++  </component>
++  <component name="TimeTrackingManager">
++    <option name="totallyTimeSpent" value="8516000" />
++  </component>
++  <component name="ToolWindowManager">
++    <frame x="-8" y="-8" width="1456" height="876" extended-state="6" />
++    <editor active="true" />
++    <layout>
++      <window_info id="Favorites" side_tool="true" />
++      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49799198" visible="true" weight="0.27507162" />
++      <window_info id="Structure" order="1" sideWeight="0.502008" side_tool="true" weight="0.18266475" />
++      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
++      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
++      <window_info active="true" anchor="bottom" id="Version Control" visible="true" weight="0.32974428" />
++      <window_info anchor="bottom" id="Terminal" weight="0.23149395" />
++      <window_info anchor="bottom" id="Event Log" side_tool="true" />
++      <window_info anchor="bottom" id="Database Console" weight="0.32974428" />
++      <window_info anchor="bottom" id="Message" order="0" />
++      <window_info anchor="bottom" id="Find" order="1" weight="0.32974428" />
++      <window_info anchor="bottom" id="Run" order="2" />
++      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
++      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
++      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
++      <window_info anchor="bottom" id="TODO" order="6" />
++      <window_info anchor="right" id="Database" weight="0.3295129" />
++      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
++      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
++      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
++    </layout>
++  </component>
++  <component name="TypeScriptGeneratedFilesManager">
++    <option name="version" value="1" />
++  </component>
++  <component name="VcsManagerConfiguration">
++    <MESSAGE value="Ejercicios de base de datos y fichero" />
++    <option name="LAST_COMMIT_MESSAGE" value="Ejercicios de base de datos y fichero" />
++  </component>
++  <component name="editorHistoryManager">
++    <entry file="file://$PROJECT_DIR$/public/php/juanma.php">
++      <provider selected="true" editor-type-id="text-editor">
++        <state>
++          <caret column="5" lean-forward="true" selection-start-column="5" selection-end-column="5" />
++        </state>
++      </provider>
++    </entry>
++    <entry file="file://$PROJECT_DIR$/public/php/admin.php">
++      <provider selected="true" editor-type-id="text-editor">
++        <state relative-caret-position="221">
++          <caret line="13" column="32" selection-start-line="13" selection-start-column="12" selection-end-line="13" selection-end-column="32" />
++        </state>
++      </provider>
++    </entry>
++    <entry file="file://$PROJECT_DIR$/public/php/conexion.inc.php">
++      <provider selected="true" editor-type-id="text-editor">
++        <state relative-caret-position="17">
++          <caret line="1" column="4" selection-start-line="1" selection-start-column="4" selection-end-line="11" selection-end-column="5" />
++        </state>
++      </provider>
++    </entry>
++    <entry file="file://$PROJECT_DIR$/public/php/usuarios.php">
++      <provider selected="true" editor-type-id="text-editor">
++        <state relative-caret-position="340">
++          <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
++        </state>
++      </provider>
++    </entry>
++    <entry file="file://$PROJECT_DIR$/public/php/juanmaCurriculumFormateado.php">
++      <provider selected="true" editor-type-id="text-editor">
++        <state relative-caret-position="17">
++          <caret line="1" selection-start-line="1" selection-end-line="1" />
++        </state>
++      </provider>
++    </entry>
++    <entry file="file://$PROJECT_DIR$/public/descargas/curriculum.txt">
++      <provider selected="true" editor-type-id="text-editor">
++        <state relative-caret-position="187">
++          <caret line="11" column="28" lean-forward="true" selection-start-line="11" selection-start-column="28" selection-end-line="11" selection-end-column="28" />
++        </state>
++      </provider>
++    </entry>
++    <entry file="file://$PROJECT_DIR$/public/php/registro.php">
++      <provider selected="true" editor-type-id="text-editor">
++        <state relative-caret-position="408">
++          <caret line="24" column="36" lean-forward="true" selection-start-line="24" selection-start-column="36" selection-end-line="24" selection-end-column="36" />
++        </state>
++      </provider>
++    </entry>
++    <entry file="file://$PROJECT_DIR$/public/index.html">
++      <provider selected="true" editor-type-id="text-editor">
++        <state relative-caret-position="255">
++          <caret line="15" column="76" selection-start-line="15" selection-start-column="76" selection-end-line="15" selection-end-column="76" />
++        </state>
++      </provider>
++    </entry>
++    <entry file="file://$PROJECT_DIR$/public/php/borrar.php">
++      <provider selected="true" editor-type-id="text-editor">
++        <state relative-caret-position="272">
++          <caret line="16" column="8" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="28" />
++        </state>
++      </provider>
++    </entry>
++    <entry file="file://$PROJECT_DIR$/public/php/protected.php">
++      <provider selected="true" editor-type-id="text-editor">
++        <state relative-caret-position="102">
++          <caret line="9" column="9" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="9" />
++        </state>
++      </provider>
++    </entry>
++    <entry file="file://$PROJECT_DIR$/public/php/login.php">
++      <provider selected="true" editor-type-id="text-editor">
++        <state relative-caret-position="221">
++          <caret line="13" column="9" selection-start-line="13" selection-start-column="9" selection-end-line="13" selection-end-column="9" />
++        </state>
++      </provider>
++    </entry>
++    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/9799afe5-651a-40dd-a211-8f1b0d47567f/console.sql">
++      <provider selected="true" editor-type-id="text-editor">
++        <state>
++          <caret column="22" selection-start-column="22" selection-end-column="22" />
++        </state>
++      </provider>
++    </entry>
++    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/9799afe5-651a-40dd-a211-8f1b0d47567f/console_1.sql">
++      <provider selected="true" editor-type-id="text-editor">
++        <state>
++          <caret column="22" selection-start-column="22" selection-end-column="22" />
++        </state>
++      </provider>
++    </entry>
++    <entry file="file://$PROJECT_DIR$/public/php/agenda.php">
++      <provider selected="true" editor-type-id="text-editor">
++        <state relative-caret-position="150">
++          <caret line="41" selection-start-line="41" selection-end-line="41" />
++        </state>
++      </provider>
++    </entry>
+   </component>
+ </project>
+\ No newline at end of file
