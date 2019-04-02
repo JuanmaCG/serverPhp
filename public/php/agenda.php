@@ -30,21 +30,26 @@
         insertarDatosFormulario($conexion);
     }
 
-/*    $sql = "create table prueba (
-        id int not null primary key auto_increment
+/*    $sql = "create table ciudad (
+        id int not null primary key auto_increment,
+        ciudad varchar(50),
+        pais varchar(50),
+        habitantes int,
+        superficie float,
+        tieneMetro boolean
     )";
 
     if(mysqli_query($conexion, $sql)){
         echo "Tabla creada.";
     } else{
         echo "ERROR $sql. " . mysqli_error($conexion);
-    }*/
+    }
 
 
 
     $conexion->close();
 
-?>
+*/?>
 
 
 
