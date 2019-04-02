@@ -28,6 +28,7 @@
     if(isset($_POST['insertar'])){
 
         insertarDatosFormulario($conexion);
+        header("refresh:0");
     }
 
 /*    $sql = "create table ciudad (
