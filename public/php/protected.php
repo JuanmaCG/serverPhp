@@ -37,11 +37,24 @@
         <input type = "submit" value = "Borrar mi cuenta!!!!!!!!" name="borrar">
     </form>
 
+    <br>
+
+
+        <form enctype="multipart/form-data" action="subidaFichero.php" method="POST">
+            <input type="hidden" name="MAX_FILE_SIZE" value="30000" /><br>
+            Enviar este fichero: <input name="fichero_usuario" type="file" /><br>
+            <input type="submit" value="Enviar fichero" />
+        </form>
+
+
     <?php
         include_once 'descargas.inc.php';
     ?>
 
-    
+
+
+
+
 
 </body>
 </html>
