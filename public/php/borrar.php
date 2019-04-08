@@ -2,7 +2,7 @@
         
         include 'login.php';
 
-        include_once 'conexion.inc.php';
+        include_once 'conexion.php';
 
         $sql = "DELETE FROM usuarios WHERE username = '".$_SESSION['username']."'"; 
         if($conexion->query($sql) === true){ 

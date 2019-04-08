@@ -1,6 +1,6 @@
 <?php
 
-    include 'conexion.inc.php';
+    include 'conexion.php';
 
     $buscarUsuario = "SELECT * FROM $tbl_name
                     WHERE username = '$_POST[username]' ";
