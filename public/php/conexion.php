@@ -4,7 +4,7 @@ class Conexion{
     private $host_db = "localhost";
     private $user_db = "root";
     private $pass_db = "root";
-    private $db_name = "usuarios";
+    private $db_name = "agenda";
     private $conexion;
 
     function __construct(){

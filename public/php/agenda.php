@@ -1,5 +1,5 @@
 <?php
-    $host_db = "localhost";
+    /*$host_db = "localhost";
     $user_db = "root";
     $pass_db = "root";
     $db_name = "agenda";
@@ -11,15 +11,17 @@
         die("La conexion falló: " . $conexion->connect_error);
     }
 
-    mysqli_query($conexion, "set names 'UTF8'");
+    mysqli_query($conexion, "set names 'UTF8'");*/
 
-//    mysqli_query($conexion, "INSERT INTO agenda VALUES('1', '2', '3', '4', 5, 6.0)");  INSERTA DATOS
+    include 'conexion.php';
 
-    $result = mysqli_query($conexion, "SELECT * FROM agenda");
+    $db_conexion = new Conexion();
 
-    function insertarDatosFormulario($conexion){
+    $result = $db_conexion->query("select * from agenda");
 
-        $stmt = $conexion->prepare("INSERT INTO agenda VALUES (?,?,?,?,?,?)");
+    function insertarDatosFormulario($db_conexion){
+
+        $stmt = $db_conexion->prepare("INSERT INTO agenda VALUES (?,?,?,?,?,?)");
         $stmt->bind_param("ssssid", $_POST['nombre'], $_POST['apellidos'], $_POST['direccion'], $_POST['telefono'], $_POST['edad'], $_POST['altura'] );
         $stmt->execute();
 
@@ -27,7 +29,7 @@
 
     if(isset($_POST['insertar'])){
 
-        insertarDatosFormulario($conexion);
+        insertarDatosFormulario($db_conexion);
         header("refresh:0");
     }
 
@@ -52,6 +54,38 @@
 
 */?>
 
+<?php
+
+
+    if(isset($_POST['consulta'])){
+        $sql = $_POST['consulta'];
+        $resultadoConsulta = $db_conexion->query($sql);
+        $fichero = "agenda.xls";
+        $ruta = '../descargas/' . $fichero;
+        header('Content-Disposition: attachment; filename=' . $fichero);
+        header("Content-Type: application/vnd.ms-excel");
+
+
+        $isPrintHeader = false;
+        if (!empty($resultadoConsulta)) {
+            foreach ($resultadoConsulta as $valor) {
+                if (!$isPrintHeader) {
+                    echo implode("\t", array_keys($valor)) . "\n";
+                    $isPrintHeader = true;
+                }
+                echo implode("\t", array_values($valor)) . "\r\n";
+            }
+        }
+        exit();
+    }
+
+
+
+
+
+
+?>
+
 
 
 
@@ -67,19 +101,23 @@
    </tr>
 
     <?php
-    while($agenda = $result->fetch_assoc()){ ?>
+    if (! empty($result)) {
+        foreach ($result as $valor => $value) {
+            ?>
 
-        <tr>
-            <td><?php echo $agenda['nombre']; ?></td>
-            <td><?php echo $agenda['apellidos']; ?></td>
-            <td><?php echo $agenda['direccion']; ?></td>
-            <td><?php echo $agenda['telefono']; ?></td>
-            <td><?php echo $agenda['edad']; ?></td>
-            <td><?php echo $agenda['altura']." M"; ?></td>
+            <tr>
+                <td><?php echo $result[$valor]['nombre']; ?></td>
+                <td><?php echo $result[$valor]['apellidos']; ?></td>
+                <td><?php echo $result[$valor]['direccion']; ?></td>
+                <td><?php echo $result[$valor]['telefono']; ?></td>
+                <td><?php echo $result[$valor]['edad']; ?></td>
+                <td><?php echo $result[$valor]['altura'] . " M"; ?></td>
 
-        </tr>
+            </tr>
 
-    <?php } ?>
+        <?php }
+    }
+    ?>
 
 </table>
 
@@ -96,3 +134,10 @@
     <label>Altura: </label> <input type = "number" name ="altura" step="0.01" required><br>
     <input type="submit" value="insertar" name ="insertar">
 </form>
+
+<div>
+    <form action="" method="post">
+        <input type="text" name="consulta">
+        <input type="submit" name="enviar" value="Consulta">
+    </form>
+</div>
