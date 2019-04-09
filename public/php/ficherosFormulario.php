@@ -11,7 +11,7 @@ class ficherosFormulario{
     {
         if(!file_exists($this->file)){
             fopen($this->file, "a");
-            fclose($file);
+            fclose($this->file);
         }
         $this->filecontent = file("../usuarios.txt");
     }
